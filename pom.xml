@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>htw.team1</groupId>
-	<artifactId>modulplanner</artifactId>
+	<artifactId>studyPlanner</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
