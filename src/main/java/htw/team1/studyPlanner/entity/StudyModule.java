@@ -13,9 +13,9 @@ public class StudyModule
 	private String name;
 	
 	@Column(name="semester")
-	private String semester;
+	private Integer semester;
 	
-	@Column(name="etcs", nullable=false)
+	@Column(name="ects", nullable=false)
 	private Integer credits;
 	
 	public StudyModule() {}
@@ -40,12 +40,12 @@ public class StudyModule
 		this.name = name;
 	}
 
-	public String getSemester()
+	public Integer getSemester()
 	{
 		return this.semester;
 	}
 
-	public void setSemester(String semester)
+	public void setSemester(Integer semester)
 	{
 		this.semester = semester;
 	}
