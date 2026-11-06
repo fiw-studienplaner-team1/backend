@@ -25,7 +25,7 @@ public class ModuleService {
         studyModule.setId(request.id());
         studyModule.setName(request.name());
         studyModule.setSemester(request.semester());
-        studyModule.setCredits(request.credits());
+        studyModule.setEcts(request.ects());
 
         StudyModule saved = moduleRepository.save(studyModule);
         return toResponse(saved);
@@ -55,7 +55,7 @@ public class ModuleService {
                 studyModule.getId(),
                 studyModule.getName(),
                 studyModule.getSemester(),
-                studyModule.getCredits()
+                studyModule.getEcts()
         );
     }
 }

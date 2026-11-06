@@ -16,7 +16,7 @@ public class StudyModule
 	private Integer semester;
 	
 	@Column(name="ects", nullable=false)
-	private Integer credits;
+	private Integer ects;
 	
 	public StudyModule() {}
 
@@ -50,14 +50,14 @@ public class StudyModule
 		this.semester = semester;
 	}
 
-	public Integer getCredits()
+	public Integer getEcts()
 	{
-		return this.credits;
+		return this.ects;
 	}
 
-	public void setCredits(Integer credits)
+	public void setEcts(Integer ects)
 	{
-		this.credits = credits;
+		this.ects = ects;
 	}
 	
 }
