@@ -22,11 +22,12 @@ public class StudyModule
 	private Integer sws;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name="art", nullable=false)
+	@Column(name="art")
 	private ModulArt art;
 
-	@Column(name="turnus", nullable=false)
-	private String turnus;
+	@Enumerated(EnumType.STRING)
+	@Column(name="turnus")
+	private ModulTurnus turnus;
 	
 	public StudyModule() {}
 
@@ -90,12 +91,12 @@ public class StudyModule
 		this.art = art;
 	}
 
-	public String getTurnus()
+	public ModulTurnus getTurnus()
 	{
 		return this.turnus;
 	}
 
-	public void setTurnus(String turnus)
+	public void setTurnus(ModulTurnus turnus)
 	{
 		this.turnus = turnus;
 	}

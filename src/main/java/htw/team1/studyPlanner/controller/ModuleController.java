@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/modules")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ModuleController
 {
     // Logger für Meldungen in Konsole/Terminal bzw. Log-Dateien
