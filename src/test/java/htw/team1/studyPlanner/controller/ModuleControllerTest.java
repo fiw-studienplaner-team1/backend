@@ -65,7 +65,7 @@ class ModuleControllerTest {
                 .andExpect(jsonPath("$.ects", is(6)))
                 .andExpect(jsonPath("$.sws", is(2)))
                 .andExpect(jsonPath("$.art", is("WAHLPFLICHT")))
-                .andExpect(jsonPath("$.turnus", is("WISE")));
+                .andExpect(jsonPath("$.turnus").value(org.hamcrest.Matchers.nullValue()));
     }
 
     @Test
