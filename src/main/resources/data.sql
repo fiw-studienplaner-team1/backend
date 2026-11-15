@@ -35,3 +35,4 @@ INSERT INTO modules (id, name, semester, ects, art, sws) VALUES ('B64','AWE-Modu
 INSERT INTO modules (id, name, semester, ects, art, sws) VALUES ('B65','Bachelorseminar und Abschlusskolloquium',6,3,'PFLICHT',0);
 INSERT INTO modules (id, name, semester, ects, sws) VALUES ('B65.1','Bachelorseminar',6,0,1);
 INSERT INTO modules (id, name, semester, ects, art, sws) VALUES ('B66','Bachelorarbeit',6,12,'PFLICHT',0);
+INSERT INTO semesterplan (gewuenschte_ects, gewuenschte_sws, fk_benutzer_id, fk_semester_id) VALUES (NULL, NULL, 1, 1);
