@@ -17,6 +17,17 @@ public class StudyModule
 	
 	@Column(name="ects", nullable=false)
 	private Integer ects;
+
+	@Column(name="sws", nullable=false)
+	private Integer sws;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="art")
+	private ModulArt art;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="turnus")
+	private ModulTurnus turnus;
 	
 	public StudyModule() {}
 
@@ -58,6 +69,36 @@ public class StudyModule
 	public void setEcts(Integer ects)
 	{
 		this.ects = ects;
+	}
+
+	public Integer getSws()
+	{
+		return this.sws;
+	}
+
+	public void setSws(Integer sws)
+	{
+		this.sws = sws;
+	}
+
+	public ModulArt getArt()
+	{
+		return this.art;
+	}
+
+	public void setArt(ModulArt art)
+	{
+		this.art = art;
+	}
+
+	public ModulTurnus getTurnus()
+	{
+		return this.turnus;
+	}
+
+	public void setTurnus(ModulTurnus turnus)
+	{
+		this.turnus = turnus;
 	}
 	
 }

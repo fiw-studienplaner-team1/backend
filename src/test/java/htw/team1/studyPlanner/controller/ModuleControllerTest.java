@@ -1,5 +1,7 @@
 package htw.team1.studyPlanner.controller;
 
+import htw.team1.studyPlanner.entity.ModulArt;
+import htw.team1.studyPlanner.entity.ModulTurnus;
 import htw.team1.studyPlanner.entity.StudyModule;
 import htw.team1.studyPlanner.repository.ModuleRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,16 +30,19 @@ class ModuleControllerTest {
     @BeforeEach
     void setUp() {
         moduleRepository.deleteAll();
-        moduleRepository.save(createModule("TEST1", "Testmodul Eins", 1, 5));
-        moduleRepository.save(createModule("TEST2", "Testmodul Zwei", 2, 6));
+        moduleRepository.save(createModule("TEST1", "Testmodul Eins", 1, 5, 4, ModulArt.PFLICHT, ModulTurnus.WISE));
+        moduleRepository.save(createModule("TEST2", "Testmodul Zwei", 2, 6, 2, ModulArt.WAHLPFLICHT, null));
     }
 
-    private StudyModule createModule(String id, String name, int semester, int ects) {
+    private StudyModule createModule(String id, String name, int semester, int ects, int sws, ModulArt art, ModulTurnus turnus) {
         StudyModule module = new StudyModule();
         module.setId(id);
         module.setName(name);
         module.setSemester(semester);
         module.setEcts(ects);
+        module.setSws(sws);
+        module.setArt(art);
+        module.setTurnus(turnus);
         return module;
     }
 
@@ -57,7 +62,10 @@ class ModuleControllerTest {
                 .andExpect(jsonPath("$.id", is("TEST2")))
                 .andExpect(jsonPath("$.name", is("Testmodul Zwei")))
                 .andExpect(jsonPath("$.semester", is(2)))
-                .andExpect(jsonPath("$.ects", is(6)));
+                .andExpect(jsonPath("$.ects", is(6)))
+                .andExpect(jsonPath("$.sws", is(2)))
+                .andExpect(jsonPath("$.art", is("WAHLPFLICHT")))
+                .andExpect(jsonPath("$.turnus").value(org.hamcrest.Matchers.nullValue()));
     }
 
     @Test
