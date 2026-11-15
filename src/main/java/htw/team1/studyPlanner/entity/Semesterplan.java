@@ -30,6 +30,48 @@ public class Semesterplan {
 
     public Semesterplan() {}
 
+    public Integer getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(Integer planId) {
+        this.planId = planId;
+    }
+
+    public Integer getDesiredEcts() {
+        return desiredEcts;
+    }
+
+    public void setDesiredEcts(Integer desiredEcts) {
+        this.desiredEcts = desiredEcts;
+    }
+
+    public Integer getDesiredSws() {
+        return desiredSws;
+    }
+
+    public void setDesiredSws(Integer desiredSws) {
+        this.desiredSws = desiredSws;
+    }
+
+    public Integer getSemesterId() {
+        return semesterId;
+    }
+
+    public void setSemesterId(Integer semesterId) {
+        this.semesterId = semesterId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+
+
 
 
 }
