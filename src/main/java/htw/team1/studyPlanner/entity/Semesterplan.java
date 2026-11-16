@@ -20,11 +20,13 @@ public class Semesterplan {
     @Column(name = "gewuenschte_sws")
     private Integer desiredSws;
 
-    // vorlaeufig nur die ID, wird spaeter @ManyToOne zu Benutzer
+    // TODO: Ersetzen durch @ManyToOne zu Benutzer, sobald die Entitaet existiert
+    //       Dann auch Getter/Setter auf das Benutzer-Objekt umstellen
     @Column(name = "fk_benutzer_id")
     private Integer userId;
 
-    // vorlaeufig nur die ID, wird spaeter @ManyToOne zu Semester
+    // TODO: Ersetzen durch @ManyToOne zu Semester, sobald die Entitaet existiert
+    //       Dann auch Getter/Setter auf das Semester-Objekt umstellen
     @Column(name ="fk_semester_id")
     private Integer semesterId;
 
