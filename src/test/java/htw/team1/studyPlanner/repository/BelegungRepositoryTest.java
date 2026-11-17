@@ -41,11 +41,10 @@ class BelegungRepositoryTest {
     @Test
     void findByPlanId_ShouldReturnOnlyEnrollmentsOfThisPlan() {
         // Arrange: Semester
-        Semester semester = semesterService.getOrCreate(SemesterTyp.WISE, 2029);
+        Semester semester = semesterService.getOrCreate(ModulTurnus.WISE, 2029);
 
         // Erstes Modul + Angebot
-        StudyModule module = new StudyModule();
-        module.setId("TEST1");
+        StudyModule module = new StudyModule("TEST1");
         module.setName("Testmodul");
         module.setSemester(1);
         module.setEcts(5);
@@ -58,8 +57,7 @@ class BelegungRepositoryTest {
         modulangebotRepository.save(offering);
 
         // Zweites Modul + Angebot
-        StudyModule module2 = new StudyModule();
-        module2.setId("TEST2");
+        StudyModule module2 = new StudyModule("TEST2");
         module2.setName("Testmodul 2");
         module2.setSemester(1);
         module2.setEcts(5);
