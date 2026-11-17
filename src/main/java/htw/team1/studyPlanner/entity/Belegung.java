@@ -39,10 +39,6 @@ public class Belegung {
         return enrollmentId;
     }
 
-    public void setEnrollmentId(Long enrollmentId) {
-        this.enrollmentId = enrollmentId;
-    }
-
     public BigDecimal getGrade() {
         return grade;
     }
