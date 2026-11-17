@@ -24,19 +24,25 @@ class BelegungRepositoryTest {
     private ModuleRepository moduleRepository;
     @Autowired
     private SemesterService semesterService;
+    @Autowired
+    private SemesterplanRepository semesterplanRepository;
 
     @BeforeEach
     void setUp() {
         belegungRepository.deleteAll();
+        semesterplanRepository.deleteAll();
         modulangebotRepository.deleteAll();
     }
 
     @AfterEach
     void tearDown() {
         belegungRepository.deleteAll();
+        semesterplanRepository.deleteAll();
         modulangebotRepository.deleteAll();
         moduleRepository.deleteAll();
     }
+
+
 
     @Test
     void findByPlanId_ShouldReturnOnlyEnrollmentsOfThisPlan() {
@@ -69,28 +75,41 @@ class BelegungRepositoryTest {
         offering2.setSemester(semester);
         modulangebotRepository.save(offering2);
 
+        // Zwei Semesterplaene (verschiedene Studentinnen, wegen UniqueConstraint)
+        Semesterplan plan1 = new Semesterplan();
+        plan1.setUserId(1L);
+        plan1.setSemester(semester);
+        semesterplanRepository.save(plan1);
+
+        Semesterplan plan2 = new Semesterplan();
+        plan2.setUserId(2L);
+        plan2.setSemester(semester);
+        semesterplanRepository.save(plan2);
+
+
         // Plan 1: zwei Belegungen
         Belegung b1 = new Belegung();
-        b1.setPlanId(1L);
+        b1.setPlan(plan1);
         b1.setOffering(offering);
         belegungRepository.save(b1);
 
         Belegung b2 = new Belegung();
-        b2.setPlanId(1L);
+        b2.setPlan(plan1);
         b2.setOffering(offering2);
         belegungRepository.save(b2);
 
         // Plan 2: eine Belegung (darf NICHT im Ergebnis auftauchen)
         Belegung b3 = new Belegung();
-        b3.setPlanId(2L);
+        b3.setPlan(plan2);
         b3.setOffering(offering);
         belegungRepository.save(b3);
 
         // Act
-        List<Belegung> result = belegungRepository.findByPlanId(1L);
+        List<Belegung> result = belegungRepository.findByPlan(plan1);
 
         // Assert
         assertThat(result).hasSize(2);
+
 
     }
 }
