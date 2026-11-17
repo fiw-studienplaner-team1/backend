@@ -17,7 +17,7 @@ public class Semester {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "typ", nullable = false)
-    private SemesterTyp type;
+    private ModulTurnus type;
 
     @Column(name ="jahr", nullable = false)
     private Integer year;
@@ -36,11 +36,11 @@ public class Semester {
         this.semesterId = semesterId;
     }
 
-    public SemesterTyp getType() {
+    public ModulTurnus getType() {
         return type;
     }
 
-    public void setType(SemesterTyp type) {
+    public void setType(ModulTurnus type) {
         this.type = type;
     }
 

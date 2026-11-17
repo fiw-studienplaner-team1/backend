@@ -1,7 +1,7 @@
 package htw.team1.studyPlanner.repository;
 
 import htw.team1.studyPlanner.entity.Semester;
-import htw.team1.studyPlanner.entity.SemesterTyp;
+import htw.team1.studyPlanner.entity.ModulTurnus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -13,5 +13,5 @@ public interface SemesterRepository extends JpaRepository<Semester, Long> {
 //       in der richtigen Reihenfolge.
     List<Semester> findAllByOrderByStartAsc();
 
-    Optional<Semester> findByTypeAndYear(SemesterTyp type, Integer year);
+    Optional<Semester> findByTypeAndYear(ModulTurnus type, Integer year);
 }
