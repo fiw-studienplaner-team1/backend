@@ -27,19 +27,18 @@ public class SemesterService {
 
     // Baut ein neues Semester mit berechneten Daten und speichert es
     private Semester createSemester(ModulTurnus type, Integer year) {
-        Semester semester = new Semester();
-        semester.setType(type);
-        semester.setYear(year);
+        LocalDate start;
+        LocalDate end;
 
         if (type == ModulTurnus.SOSE) {
-            semester.setStart(LocalDate.of(year, 4, 1));
-            semester.setEnd(LocalDate.of(year, 9, 30));
+            start = LocalDate.of(year, 4, 1);
+            end = LocalDate.of(year, 9, 30);
         } else {
-            semester.setStart(LocalDate.of(year, 10, 1));
-            semester.setEnd(LocalDate.of(year + 1, 3, 31));
+            start = LocalDate.of(year, 10, 1);
+            end = LocalDate.of(year + 1, 3, 31);
         }
 
-
+        Semester semester = new Semester(type, year, start, end);
         return semesterRepository.save(semester);
     }
 }

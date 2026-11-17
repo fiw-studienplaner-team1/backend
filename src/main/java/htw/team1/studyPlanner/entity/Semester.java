@@ -32,44 +32,34 @@ public class Semester {
         return semesterId;
     }
 
-    public void setSemesterId(Long semesterId) {
-        this.semesterId = semesterId;
-    }
 
     public ModulTurnus getType() {
         return type;
-    }
-
-    public void setType(ModulTurnus type) {
-        this.type = type;
     }
 
     public Integer getYear() {
         return year;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
     public LocalDate getEnd() {
         return end;
-    }
-
-    public void setEnd(LocalDate end) {
-        this.end = end;
     }
 
     public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(LocalDate start) {
-        this.start = start;
-    }
-
     public Semester() {}
-
+    // Ein Semester wird nur ueber diesen Konstruktor vollstaendig angelegt (Typ, Jahr, Beginn, Ende).
+// Es gibt bewusst keine Setter: So kann kein unvollstaendiges Semester entstehen,
+// und Typ/Jahr/Daten koennen nach dem Anlegen nicht mehr veraendert werden.
+// Die ID vergibt die Datenbank. Der leere Konstruktor wird von JPA benoetigt.
+    public Semester(ModulTurnus type, Integer year, LocalDate start, LocalDate end) {
+        this.type = type;
+        this.year = year;
+        this.start = start;
+        this.end = end;
+    }
 
 
 
