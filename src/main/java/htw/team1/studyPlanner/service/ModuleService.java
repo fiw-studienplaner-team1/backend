@@ -21,8 +21,7 @@ public class ModuleService {
 
     // Create TODO brauchen wir create ? soll man ein module im frontend anlegen koennen?
     public ModuleResponseDTO createModule(ModuleRequestDTO request) {
-        StudyModule studyModule = new StudyModule();
-        studyModule.setId(request.id());
+        StudyModule studyModule = new StudyModule(request.id());
         studyModule.setName(request.name());
         studyModule.setSemester(request.semester());
         studyModule.setEcts(request.ects());

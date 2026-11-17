@@ -28,17 +28,18 @@ public class StudyModule
 	@Enumerated(EnumType.STRING)
 	@Column(name="turnus")
 	private ModulTurnus turnus;
-	
+
 	public StudyModule() {}
+
+	// Die ID (z. B. "B11") wird nur beim Anlegen gesetzt und kann danach nicht mehr geaendert werden.
+// Der leere Konstruktor wird von JPA benoetigt.
+	public StudyModule(String id) {
+		this.id = id;
+	}
 
 	public String getId()
 	{
 		return this.id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getName()

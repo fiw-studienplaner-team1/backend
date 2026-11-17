@@ -35,8 +35,7 @@ class ModuleControllerTest {
     }
 
     private StudyModule createModule(String id, String name, int semester, int ects, int sws, ModulArt art, ModulTurnus turnus) {
-        StudyModule module = new StudyModule();
-        module.setId(id);
+        StudyModule module = new StudyModule(id);
         module.setName(name);
         module.setSemester(semester);
         module.setEcts(ects);
