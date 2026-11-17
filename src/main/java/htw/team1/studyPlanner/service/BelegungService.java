@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+// TODO: Fehlerbehandlung im Team festlegen (ResponseStatusException im Service vs. eigene Exceptions
+//       mit zentralem @ControllerAdvice) und dann hier und in den anderen Services einheitlich umsetzen
 @Service
 public class BelegungService {
 

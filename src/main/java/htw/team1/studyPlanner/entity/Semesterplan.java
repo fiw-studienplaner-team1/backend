@@ -12,6 +12,8 @@ public class Semesterplan {
     @Column(name = "plan_id")
     private Long planId;
 
+    // TODO: desiredEcts und desiredSws in Semesterplan sind Long, bei StudyModule sind ECTS und SWS Integer.
+    //       Im Schema sind alle integer. Das ist unkritisch, aber uneinheitlich (bei der Glossar-Anpassung vereinheitlichen).
     // Gewuenschte ECTS
     @Column(name = "gewuenschte_ects")
     private Long desiredEcts;
