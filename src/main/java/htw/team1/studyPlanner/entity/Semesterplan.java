@@ -3,7 +3,7 @@ package htw.team1.studyPlanner.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "semesterplan")
+@Table(name = "semesterplan", uniqueConstraints = @UniqueConstraint(columnNames = {"fk_benutzer_id", "fk_semester_id"}))
 public class Semesterplan {
 
     // Primaerschluessel
@@ -22,22 +22,19 @@ public class Semesterplan {
 
     // TODO: Ersetzen durch @ManyToOne zu Benutzer, sobald die Entitaet existiert
     //       Dann auch Getter/Setter auf das Benutzer-Objekt umstellen
+
     @Column(name = "fk_benutzer_id")
     private Long userId;
 
-    // TODO: Ersetzen durch @ManyToOne zu Semester, sobald die Entitaet existiert
-    //       Dann auch Getter/Setter auf das Semester-Objekt umstellen
-    @Column(name ="fk_semester_id")
-    private Long semesterId;
+    // Jeder Semesterplan gehoert zu genau einem Semester (viele Plaene -> ein Semester)
+    @ManyToOne
+    @JoinColumn(name ="fk_semester_id", nullable = false)
+    private Semester semester;
 
     public Semesterplan() {}
 
     public Long getPlanId() {
         return planId;
-    }
-
-    public void setPlanId(Long planId) {
-        this.planId = planId;
     }
 
     public Long getDesiredEcts() {
@@ -56,12 +53,12 @@ public class Semesterplan {
         this.desiredSws = desiredSws;
     }
 
-    public Long getSemesterId() {
-        return semesterId;
+    public Semester getSemester() {
+        return semester;
     }
 
-    public void setSemesterId(Long semesterId) {
-        this.semesterId = semesterId;
+    public void setSemester(Semester semester) {
+        this.semester = semester;
     }
 
     public Long getUserId() {
