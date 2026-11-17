@@ -38,10 +38,6 @@ public class Modulangebot {
         return offeringId;
     }
 
-    public void setOfferingId(Long offeringId) {
-        this.offeringId = offeringId;
-    }
-
     public StudyModule getModule() {
         return module;
     }
