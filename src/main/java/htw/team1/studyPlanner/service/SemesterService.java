@@ -18,6 +18,9 @@ public class SemesterService {
     // Liefert das Semester; legt es an, falls es noch nicht existiert
     // TODO: ModulTurnus wird noch umbenannt (nach Donnerstag)
     public Semester getOrCreate(ModulTurnus type, Integer year) {
+       if(type == ModulTurnus.SONST){
+           throw new IllegalArgumentException("Ein Semester muss WISE oder SOSE sein.");
+       }
         return semesterRepository.findByTypeAndYear(type, year)
                 .orElseGet(() -> createSemester(type, year));
     }

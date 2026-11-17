@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
 class SemesterServiceTest {
@@ -51,6 +52,12 @@ class SemesterServiceTest {
 
         assertThat(result2.getSemesterId()).isEqualTo(result1.getSemesterId());
         assertThat(semesterRepository.count()).isEqualTo(1L);
+
+    }
+    @Test
+    void getOrCreate_WhenTypeIsSonst_ShouldThrowException() {
+        assertThatThrownBy(() -> semesterService.getOrCreate(ModulTurnus.SONST, 2029))
+                .isInstanceOf(IllegalArgumentException.class);
 
     }
 }
