@@ -1,3 +1,6 @@
+INSERT INTO semester (typ, jahr, beginn, ende) VALUES ('WISE', 2025, '2025-10-01', '2026-03-31');
+INSERT INTO semester (typ, jahr, beginn, ende) VALUES ('SOSE', 2026, '2026-04-01', '2026-09-30');
+INSERT INTO semester (typ, jahr, beginn, ende) VALUES ('WISE', 2026, '2026-10-01', '2027-03-31');
 INSERT INTO modules (id, name, semester, ects, art, sws, turnus) VALUES ('B11','Programmierung 1',1,6,'PFLICHT',6,'WISE');
 INSERT INTO modules (id, name, semester, ects, art, sws, turnus) VALUES ('B12','Rechnerarchitektur/Betriebssysteme',1,5,'PFLICHT',4,'WISE');
 INSERT INTO modules (id, name, semester, ects, art, sws, turnus) VALUES ('B13','Grundlegende Konzepte der Informatik',1,5,'PFLICHT',4,'WISE');
@@ -36,3 +39,4 @@ INSERT INTO modules (id, name, semester, ects, art, sws) VALUES ('B65','Bachelor
 INSERT INTO modules (id, name, semester, ects, sws) VALUES ('B65.1','Bachelorseminar',6,0,1);
 INSERT INTO modules (id, name, semester, ects, art, sws) VALUES ('B66','Bachelorarbeit',6,12,'PFLICHT',0);
 INSERT INTO semesterplan (gewuenschte_ects, gewuenschte_sws, fk_benutzer_id, fk_semester_id) VALUES (NULL, NULL, 1, 1);
+
