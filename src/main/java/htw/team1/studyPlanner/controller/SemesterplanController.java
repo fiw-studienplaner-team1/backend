@@ -1,5 +1,6 @@
 package htw.team1.studyPlanner.controller;
 
+import htw.team1.studyPlanner.dto.SemesterplanDetailDTO;
 import htw.team1.studyPlanner.dto.SemesterplanRequestDTO;
 import htw.team1.studyPlanner.dto.SemesterplanResponseDTO;
 import htw.team1.studyPlanner.service.SemesterplanService;
@@ -8,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/semesterplans")
@@ -32,5 +35,15 @@ public class SemesterplanController {
                 .status(HttpStatus.CREATED)
                 .body(plan);
 
+    }
+    // GET /semesterplans - laedt alle Semesterplaene der Test-Studentin mit ihren Modulen
+    @GetMapping
+    public ResponseEntity<List<SemesterplanDetailDTO>> getPlans() {
+        LOG.info("Alle Semesterplaene werden abgerufen");
+
+        List<SemesterplanDetailDTO> plans = this.semesterplanService.getPlans();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(plans);
     }
 }

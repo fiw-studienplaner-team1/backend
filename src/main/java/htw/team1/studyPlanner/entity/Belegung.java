@@ -20,6 +20,8 @@ public class Belegung {
     @Column(name = "note", precision = 2, scale = 1)
     private BigDecimal grade;
 
+    // TODO: status als Enum statt String umsetzen (wie ModulArt), damit keine Tippfehler wie "bestannden" moeglich sind.
+    //       Umsetzen mit der Story "Modulstatus erfassen", sobald feststeht, welche Status es gibt.
     @Column(name = "status")
     private String status;
 
