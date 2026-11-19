@@ -40,3 +40,33 @@ INSERT INTO modules (id, name, semester, ects, sws) VALUES ('B65.1','Bachelorsem
 INSERT INTO modules (id, name, semester, ects, art, sws) VALUES ('B66','Bachelorarbeit',6,12,'PFLICHT',0);
 INSERT INTO semesterplan (gewuenschte_ects, gewuenschte_sws, fk_benutzer_id, fk_semester_id) VALUES (NULL, NULL, 1, 1);
 
+/* Modulangebote: WISE-Module im WiSe 2026/27, SOSE-Module im SoSe 2026 */
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B11', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B12', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B13', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B14', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B15', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B16', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B23', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B24', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B25', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B26', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B32', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B33', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B34', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B34.1', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B34.2', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B35', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B35.1', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B35.2', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B42', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B51', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B52', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B53', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B55', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B56', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B61', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NULL, 'B62', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES ('Klausur', 'B21', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES ('Klausur', 'B22', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
+INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES ('Hausarbeit oder Hackathon und Klausur', 'B31', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
