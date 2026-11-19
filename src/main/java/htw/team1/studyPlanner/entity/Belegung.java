@@ -23,10 +23,10 @@ public class Belegung {
     @Column(name = "status")
     private String status;
 
-    // TODO: Ersetzen durch @ManyToOne zu Semesterplan, sobald die Entitaet existiert
-//       Dann auch Getter/Setter auf das Semesterplan-Objekt umstellen
-    @Column(name = "fk_plan_id", nullable = false)
-    private Long planId;
+    // Jede Belegung gehoert zu genau einem Semesterplan (viele Belegungen -> ein Plan)
+    @ManyToOne
+    @JoinColumn(name = "fk_plan_id", nullable = false)
+    private Semesterplan plan;
 
     @ManyToOne
     @JoinColumn(name = "fk_modulangebot_id", nullable = false)
@@ -55,12 +55,12 @@ public class Belegung {
         this.status = status;
     }
 
-    public Long getPlanId() {
-        return planId;
+    public Semesterplan getPlan() {
+        return plan;
     }
 
-    public void setPlanId(Long planId) {
-        this.planId = planId;
+    public void setPlan(Semesterplan plan) {
+        this.plan = plan;
     }
 
     public Modulangebot getOffering() {
@@ -70,6 +70,7 @@ public class Belegung {
     public void setOffering(Modulangebot offering) {
         this.offering = offering;
     }
+
 
 
 }
