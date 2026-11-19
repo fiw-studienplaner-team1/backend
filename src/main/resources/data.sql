@@ -70,3 +70,6 @@ INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES (NU
 INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES ('Klausur', 'B21', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
 INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES ('Klausur', 'B22', (SELECT semester_id FROM semester WHERE typ = 'SOSE' AND jahr = 2026));
 INSERT INTO modulangebot (pruefungsform, fk_modul_id, fk_semester_id) VALUES ('Hausarbeit oder Hackathon und Klausur', 'B31', (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026));
+
+-- Belegungen (Beispiel: Semesterplan 1)
+INSERT INTO belegung (note, status, fk_plan_id, fk_modulangebot_id) VALUES (NULL, NULL, 1, (SELECT modulangebot_id FROM modulangebot WHERE fk_modul_id = 'B12' AND fk_semester_id = (SELECT semester_id FROM semester WHERE typ = 'WISE' AND jahr = 2026)));
