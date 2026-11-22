@@ -4,6 +4,7 @@ import htw.team1.studyPlanner.semester.entity.Semester;
 import jakarta.persistence.*;
 
 @Entity
+                                                // TODO naming fuer user/benutzer klaeren
 @Table(name = "semester_plans", uniqueConstraints = @UniqueConstraint(columnNames = {"fk_user_id", "fk_semester_id"}))
 public class SemesterPlan
 {

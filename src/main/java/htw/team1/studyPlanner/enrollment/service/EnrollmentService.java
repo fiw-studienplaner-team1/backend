@@ -39,27 +39,28 @@ public class EnrollmentService
     //Wenn ein Modul in einen Plan eingeplant wird, wird nicht geprueft, ob die ECTS- oder SWS-Grenze ueberschritten wird.
     // Die Entity hat targetEcts und targetWeeklyHours, aber diese werden nie geprueft.
 
-    // Plant ein Modul in einen Semesterplan ein (legt eine Belegung an)
-    public EnrollmentResponseDTO planModule(Long planId, EnrollmentRequestDTO request) {
+    // Schreibt ein Modul in einen Semesterplan ein (legt eine Belegung an)
+    public EnrollmentResponseDTO enrollToSemesterPlan(Long semesterPlanId, EnrollmentRequestDTO request) {
 
         // 1. Plan suchen, sonst 404
-        SemesterPlan plan = semesterPlanRepository.findById(planId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Semesterplan " + planId + " nicht gefunden."));
+        SemesterPlan semesterPlan = semesterPlanRepository.findById(semesterPlanId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Semesterplan " + semesterPlanId + " nicht gefunden."));
+
 
         // 2. Modul suchen, sonst 404
         StudyModule module = moduleRepository.findById(request.moduleId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Modul " + request.moduleId() + " nicht gefunden."));
 
         // 3. Modulangebot im Semester des Plans suchen, sonst 409
-        ModuleOffering offering = moduleOfferingRepository.findByModuleIdAndSemesterId(module.getId(), plan.getSemester().getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT,"Modul " + module.getId() + " wird in diesem Semester nicht angeboten."));
+        ModuleOffering moduleOffering = moduleOfferingRepository.findByModuleIdAndSemesterId(module.getId(), semesterPlan.getSemester().getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT,"Modul " + module.getId() + " wird in diesem Semester nicht angeboten."));
 
         // 4. Schon im Plan? Dann 409
-        if (enrollmentRepository.existsByPlanIdAndModuleOfferingId(plan.getId(), offering.getId())) {
+        if (enrollmentRepository.existsBySemesterPlanIdAndModuleOfferingId(semesterPlan.getId(), moduleOffering.getId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,"Modul " + module.getId() + " ist bereits im Plan.");
         }
 
         // 5. Belegung anlegen und speichern
         Enrollment enrollment = new Enrollment();
-        enrollment.setPlan(plan);
-        enrollment.setModuleOffering(offering);
+        enrollment.setSemesterPlan(semesterPlan);
+        enrollment.setModuleOffering(moduleOffering);
         Enrollment saved = enrollmentRepository.save(enrollment);
 
         // 6. Als Response-DTO zurueckgeben
@@ -69,7 +70,7 @@ public class EnrollmentService
     private static EnrollmentResponseDTO toResponse(Enrollment enrollment) {
         return new EnrollmentResponseDTO(
                 enrollment.getId(),
-                enrollment.getPlan().getId(),
+                enrollment.getSemesterPlan().getId(),
                 enrollment.getModuleOffering().getId(),
                 enrollment.getModuleOffering().getModule().getId(),
                 enrollment.getModuleOffering().getModule().getName()

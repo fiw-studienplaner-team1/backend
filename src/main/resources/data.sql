@@ -72,4 +72,4 @@ INSERT INTO module_offerings (exam_type, fk_module_id, fk_semester_id) VALUES ('
 INSERT INTO module_offerings (exam_type, fk_module_id, fk_semester_id) VALUES ('Hausarbeit oder Hackathon und Klausur', (SELECT id FROM modules WHERE module_number = 'B31'), (SELECT id FROM semesters WHERE cycle = 'WISE' AND year = 2026));
 
 -- Belegungen (Beispiel: Semesterplan 1)
-INSERT INTO enrollments (fk_plan_id, fk_module_offering_id) VALUES (1, (SELECT id FROM module_offerings WHERE fk_module_id = (SELECT id FROM modules WHERE module_number = 'B12') AND fk_semester_id = (SELECT id FROM semesters WHERE cycle = 'WISE' AND year = 2026)));
+INSERT INTO enrollments (fk_semester_plan_id, fk_module_offering_id) VALUES (1, (SELECT id FROM module_offerings WHERE fk_module_id = (SELECT id FROM modules WHERE module_number = 'B12') AND fk_semester_id = (SELECT id FROM semesters WHERE cycle = 'WISE' AND year = 2026)));

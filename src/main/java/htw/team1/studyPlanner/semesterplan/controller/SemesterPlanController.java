@@ -1,8 +1,8 @@
 package htw.team1.studyPlanner.semesterplan.controller;
 
-import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanDetailDTO;
-import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanRequestDTO;
-import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanResponseDTO;
+import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanFilledResponseDTO;
+import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanEmptyRequestDTO;
+import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanCreateResponseDTO;
 import htw.team1.studyPlanner.semesterplan.service.SemesterPlanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,17 +20,17 @@ public class SemesterPlanController
     // Logger fuer Meldungen in der Konsole
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
-    private final SemesterPlanService semesterplanService;
+    private final SemesterPlanService semesterPlanService;
 
-    public SemesterPlanController(SemesterPlanService semesterplanService) {
-        this.semesterplanService = semesterplanService;
+    public SemesterPlanController(SemesterPlanService semesterPlanService) {
+        this.semesterPlanService = semesterPlanService;
     }
 
     @PostMapping
-    public ResponseEntity<SemesterPlanResponseDTO> createPlan(@RequestBody SemesterPlanRequestDTO request) {
+    public ResponseEntity<SemesterPlanCreateResponseDTO> createSemesterPlan(@RequestBody SemesterPlanEmptyRequestDTO request) {
         LOG.info("Semesterplan fuer Semester {} wird angelegt", request.semesterId());
 
-        SemesterPlanResponseDTO plan = this.semesterplanService.createPlan(request);
+        SemesterPlanCreateResponseDTO plan = this.semesterPlanService.createSemsterPlan(request);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -39,10 +39,10 @@ public class SemesterPlanController
     }
     // GET /semesterplans - laedt alle Semesterplaene der Test-Studentin mit ihren Modulen
     @GetMapping
-    public ResponseEntity<List<SemesterPlanDetailDTO>> getPlans() {
+    public ResponseEntity<List<SemesterPlanFilledResponseDTO>> getAllSemesterPlans() {
         LOG.info("Alle Semesterplaene werden abgerufen");
 
-        List<SemesterPlanDetailDTO> plans = this.semesterplanService.getPlans();
+        List<SemesterPlanFilledResponseDTO> plans = this.semesterPlanService.getSemesterPlans();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(plans);

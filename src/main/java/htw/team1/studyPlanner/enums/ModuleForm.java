@@ -6,6 +6,5 @@ public enum ModuleForm
     SL,
     PCÜ,
     PÜ,
-    PS,
-    BACHELORARBEIT
+    PS
 }

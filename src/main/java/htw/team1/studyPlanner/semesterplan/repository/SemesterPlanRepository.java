@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface SemesterPlanRepository extends JpaRepository<SemesterPlan, Long> {
     // Gibt es fuer diese Studentin in diesem Semester schon einen Plan?
-    boolean existsByUserAndSemesterId(Long user, Long semesterId);
+    boolean existsByUserAndSemesterId(Long userId, Long semesterId);
 
     // Alle Plaene einer Studentin, sortiert nach Semesterbeginn (Semester gleich mitladen)
     @EntityGraph(attributePaths = "semester")
-    List<SemesterPlan> findByUserOrderBySemesterStartDateAsc(Long user);
+    List<SemesterPlan> findByUserOrderBySemesterStartDateAsc(Long userId);
 }

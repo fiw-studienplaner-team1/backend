@@ -99,22 +99,22 @@ class EnrollmentControllerTest
     }
 
     @Test
-    void planModule_WhenOfferedAndNotPlanned_ShouldReturnCreated() throws Exception {
+    void enrollToSemesterPlan_WhenOfferedAndNotPlanned_ShouldReturnCreated() throws Exception {
         StudyModule module1 = moduleRepository.findAll().get(0);
         mockMvc.perform(post(url())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"moduleId\": " + module1.getId() + "}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.planId", is(winterPlan.getId().intValue())))
+                .andExpect(jsonPath("$.semesterPlanId", is(winterPlan.getId().intValue())))
                 .andExpect(jsonPath("$.moduleId", is(module1.getId().intValue())))
                 .andExpect(jsonPath("$.moduleName", is("Testmodul Eins")));
     }
 
     @Test
-    void planModule_WhenAlreadyInPlan_ShouldReturnConflict() throws Exception {
+    void enrollToSemesterPlan_WhenAlreadyInPlan_ShouldReturnConflict() throws Exception {
         Enrollment existing = new Enrollment();
-        existing.setPlan(winterPlan);
+        existing.setSemesterPlan(winterPlan);
         existing.setModuleOffering(winterOffering);
         enrollmentRepository.save(existing);
 
@@ -126,7 +126,7 @@ class EnrollmentControllerTest
     }
 
     @Test
-    void planModule_WhenNotOfferedInSemester_ShouldReturnConflict() throws Exception {
+    void enrollToSemesterPlan_WhenNotOfferedInSemester_ShouldReturnConflict() throws Exception {
         StudyModule module2 = moduleRepository.findAll().get(1);
         mockMvc.perform(post(url())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ class EnrollmentControllerTest
     }
 
     @Test
-    void planModule_WhenModuleUnknown_ShouldReturnNotFound() throws Exception {
+    void enrollToSemesterPlan_WhenModuleUnknown_ShouldReturnNotFound() throws Exception {
         mockMvc.perform(post(url())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"moduleId\": 999}"))
@@ -143,7 +143,7 @@ class EnrollmentControllerTest
     }
 
     @Test
-    void planModule_WhenPlanUnknown_ShouldReturnNotFound() throws Exception {
+    void enrollToSemesterPlan_WhenPlanUnknown_ShouldReturnNotFound() throws Exception {
         StudyModule module1 = moduleRepository.findAll().get(0);
         mockMvc.perform(post("/semesterplans/999999/enrollments")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -10,12 +10,12 @@ import java.util.List;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
-    List<Enrollment> findByPlanId(Long planId);
+    List<Enrollment> findBySemesterPlanId(Long semesterPlanId);
 
     // Ist dieses Modulangebot schon in diesem Plan eingeplant?
-    boolean existsByPlanIdAndModuleOfferingId(Long planId, Long moduleOfferingId);
+    boolean existsBySemesterPlanIdAndModuleOfferingId(Long semesterPlanId, Long moduleOfferingId);
 
     // Alle Belegungen mehrerer Plaene auf einmal, inkl. Angebot und Modul (gegen N+1)
-    @EntityGraph(attributePaths = {"plan", "moduleOffering", "moduleOffering.module"}) //"moduleOffering.semester" war hier ueberfluessig
-    List<Enrollment> findByPlanIn(List<SemesterPlan> plans);
+    @EntityGraph(attributePaths = {"semesterPlan", "moduleOffering", "moduleOffering.module"})
+    List<Enrollment> findBySemesterPlanIn(List<SemesterPlan> semesterPlans);
 }

@@ -1,9 +1,9 @@
 package htw.team1.studyPlanner.semesterplan.service;
 
-import htw.team1.studyPlanner.semesterplan.dto.PlannedModuleDTO;
-import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanDetailDTO;
-import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanRequestDTO;
-import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanResponseDTO;
+import htw.team1.studyPlanner.semesterplan.dto.PlannedModuleResponseDTO;
+import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanFilledResponseDTO;
+import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanEmptyRequestDTO;
+import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanCreateResponseDTO;
 import htw.team1.studyPlanner.semesterplan.entity.SemesterPlan;
 import htw.team1.studyPlanner.semesterplan.repository.SemesterPlanRepository;
 import htw.team1.studyPlanner.semester.entity.Semester;
@@ -41,7 +41,7 @@ public class SemesterPlanService
     }
 
     // Legt fuer die Test-Studentin einen Semesterplan im angegebenen Semester an
-    public SemesterPlanResponseDTO createPlan(SemesterPlanRequestDTO request) {
+    public SemesterPlanCreateResponseDTO createSemsterPlan(SemesterPlanEmptyRequestDTO request) {
         // 1. Semester suchen, sonst 404
         Semester semester = semesterRepository.findById(request.semesterId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -54,42 +54,42 @@ public class SemesterPlanService
         }
 
         // 3. Neuen Plan anlegen und speichern
-        SemesterPlan plan = new SemesterPlan();
-        plan.setUser(TEST_STUDENT_ID);
-        plan.setSemester(semester);
-        SemesterPlan saved = semesterPlanRepository.save(plan);
+        SemesterPlan semesterPlan = new SemesterPlan();
+        semesterPlan.setUser(TEST_STUDENT_ID);
+        semesterPlan.setSemester(semester);
+        SemesterPlan saved = semesterPlanRepository.save(semesterPlan);
 
         // 4. Als Response-DTO zurueckgeben
         return toResponse(saved);
     }
 
     // Laedt alle Semesterplaene der Test-Studentin mit ihren eingeplanten Modulen
-    public List<SemesterPlanDetailDTO> getPlans() {
+    public List<SemesterPlanFilledResponseDTO> getSemesterPlans() {
 
         // 1. Alle Plaene der Studentin, sortiert nach Semester (1. Abfrage)
-        List<SemesterPlan> plans = semesterPlanRepository.findByUserOrderBySemesterStartDateAsc(TEST_STUDENT_ID);
+        List<SemesterPlan> semesterPlans = semesterPlanRepository.findByUserOrderBySemesterStartDateAsc(TEST_STUDENT_ID);
 
         // 2. Keine Plaene? Dann leere Liste statt Fehler
-        if (plans.isEmpty()) {
+        if (semesterPlans.isEmpty()) {
             return List.of();
         }
 
         // 3. Alle Belegungen dieser Plaene auf einmal laden (2. Abfrage, gegen N+1)
-        List<Enrollment> enrollments = enrollmentRepository.findByPlanIn(plans);
+        List<Enrollment> enrollments = enrollmentRepository.findBySemesterPlanIn(semesterPlans);
 
         // 4. Pro Plan die passenden Belegungen heraussuchen und das DTO bauen
-        List<SemesterPlanDetailDTO> result = new ArrayList<>();
-        for (SemesterPlan plan : plans) {
-            List<PlannedModuleDTO> modules = new ArrayList<>();
+        List<SemesterPlanFilledResponseDTO> result = new ArrayList<>();
+        for (SemesterPlan semesterPlan : semesterPlans) {
+            List<PlannedModuleResponseDTO> modules = new ArrayList<>();
             for (Enrollment enrollment : enrollments) {
-                if (enrollment.getPlan().getId().equals(plan.getId())) {
+                if (enrollment.getSemesterPlan().getId().equals(semesterPlan.getId())) {
                     modules.add(toPlannedModule(enrollment));
                 }
             }
-            result.add(new SemesterPlanDetailDTO(
-                    plan.getId(),
-                    plan.getSemester().getId(),
-                    toLabel(plan.getSemester()),
+            result.add(new SemesterPlanFilledResponseDTO(
+                    semesterPlan.getId(),
+                    semesterPlan.getSemester().getId(),
+                    toLabel(semesterPlan.getSemester()),
                     modules
             ));
         }
@@ -97,19 +97,19 @@ public class SemesterPlanService
     }
 
     // Wandelt die Entity in das Response-DTO um
-    private static SemesterPlanResponseDTO toResponse(SemesterPlan plan) {
-        return new SemesterPlanResponseDTO(
-                plan.getId(),
-                plan.getSemester().getId(),
-                plan.getSemester().getCycle(),
-                plan.getSemester().getYear()
+    private static SemesterPlanCreateResponseDTO toResponse(SemesterPlan semesterPlan) {
+        return new SemesterPlanCreateResponseDTO(
+                semesterPlan.getId(),
+                semesterPlan.getSemester().getId(),
+                semesterPlan.getSemester().getCycle(),
+                semesterPlan.getSemester().getYear()
         );
     }
 
     // Wandelt eine Belegung in ein eingeplantes Modul fuer die Anzeige um
-    private static PlannedModuleDTO toPlannedModule(Enrollment enrollment) {
+    private static PlannedModuleResponseDTO toPlannedModule(Enrollment enrollment) {
         StudyModule module = enrollment.getModuleOffering().getModule();
-        return new PlannedModuleDTO(
+        return new PlannedModuleResponseDTO(
                 enrollment.getId(),
                 module.getId(),
                 module.getName(),

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/semesterplans/{planId}/enrollments")
+@RequestMapping("/semesterplans/{semesterPlanId}/enrollments")
 public class EnrollmentController
 {
 
@@ -23,13 +23,13 @@ public class EnrollmentController
         this.enrollmentService = enrollmentService;
     }
 
-    // POST /semesterplans/{planId}/enrollments - plant ein Modul in den Plan ein
+    // POST /semesterplans/{semesterPlanId}/enrollments - plant ein Modul in den Plan ein
     @PostMapping
-    public ResponseEntity<EnrollmentResponseDTO> planModule(@PathVariable Long planId,
+    public ResponseEntity<EnrollmentResponseDTO> createEnrollment(@PathVariable Long semesterPlanId,
                                                             @RequestBody EnrollmentRequestDTO request) {
-        LOG.info("Modul {} wird in Semesterplan {} eingeplant", request.moduleId(), planId);
+        LOG.info("Modul {} wird in Semesterplan {} eingeplant", request.moduleId(), semesterPlanId);
 
-        EnrollmentResponseDTO enrollment = this.enrollmentService.planModule(planId, request);
+        EnrollmentResponseDTO enrollment = this.enrollmentService.enrollToSemesterPlan(semesterPlanId, request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(enrollment);

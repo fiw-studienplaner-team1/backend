@@ -138,7 +138,7 @@ class SemesterPlanControllerTest
         createPlan(summer);
 
         Enrollment enrollment = new Enrollment();
-        enrollment.setPlan(winterPlan);
+        enrollment.setSemesterPlan(winterPlan);
         enrollment.setModuleOffering(offering);
         enrollmentRepository.save(enrollment);
 
@@ -151,7 +151,7 @@ class SemesterPlanControllerTest
                 .andExpect(jsonPath("$[0].modules", hasSize(0)))
                 .andExpect(jsonPath("$[1].semesterLabel", is("WiSe 2030/31")))
                 .andExpect(jsonPath("$[1].modules", hasSize(1)))
-                .andExpect(jsonPath("$[1].modules[0].name", is("Testmodul")))
+                .andExpect(jsonPath("$[1].modules[0].moduleName", is("Testmodul")))
                 .andExpect(jsonPath("$[1].modules[0].ects", is(5)))
                 .andExpect(jsonPath("$[1].modules[0].weeklyHours", is(4)));
     }

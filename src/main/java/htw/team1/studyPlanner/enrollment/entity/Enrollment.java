@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(
         name = "enrollments",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"fk_plan_id", "fk_module_offering_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"fk_semester_plan_id", "fk_module_offering_id"})
 )
 public class Enrollment
 {
@@ -21,8 +21,8 @@ public class Enrollment
 
     // Jede Belegung gehoert zu genau einem Semesterplan (viele Belegungen -> ein Plan)
     @ManyToOne
-    @JoinColumn(name = "fk_plan_id", nullable = false)
-    private SemesterPlan plan;
+    @JoinColumn(name = "fk_semester_plan_id", nullable = false)
+    private SemesterPlan semesterPlan;
 
     @ManyToOne
     @JoinColumn(name = "fk_module_offering_id", nullable = false)
@@ -34,14 +34,14 @@ public class Enrollment
         return id;
     }
 
-    public SemesterPlan getPlan()
+    public SemesterPlan getSemesterPlan()
     {
-        return plan;
+        return semesterPlan;
     }
 
-    public void setPlan(SemesterPlan plan)
+    public void setSemesterPlan(SemesterPlan semesterPlan)
     {
-        this.plan = plan;
+        this.semesterPlan = semesterPlan;
     }
 
     public ModuleOffering getModuleOffering()

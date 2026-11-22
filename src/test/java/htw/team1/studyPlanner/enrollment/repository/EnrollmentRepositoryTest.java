@@ -54,7 +54,7 @@ class EnrollmentRepositoryTest
 
 
     @Test
-    void findByPlanId_ShouldReturnOnlyEnrollmentsOfThisPlan() {
+    void findBySemesterPlanId_ShouldReturnOnlyEnrollmentsOfThisPlan() {
         // Arrange: Semester
         Semester semester = semesterService.getOrCreate(Cycle.WISE, 2029);
 
@@ -98,23 +98,23 @@ class EnrollmentRepositoryTest
 
         // Plan 1: zwei Belegungen
         Enrollment b1 = new Enrollment();
-        b1.setPlan(plan1);
+        b1.setSemesterPlan(plan1);
         b1.setModuleOffering(offering);
         enrollmentRepository.save(b1);
 
         Enrollment b2 = new Enrollment();
-        b2.setPlan(plan1);
+        b2.setSemesterPlan(plan1);
         b2.setModuleOffering(offering2);
         enrollmentRepository.save(b2);
 
         // Plan 2: eine Belegung (darf NICHT im Ergebnis auftauchen)
         Enrollment b3 = new Enrollment();
-        b3.setPlan(plan2);
+        b3.setSemesterPlan(plan2);
         b3.setModuleOffering(offering);
         enrollmentRepository.save(b3);
 
         // Act
-        List<Enrollment> result = enrollmentRepository.findByPlanId(plan1.getId());
+        List<Enrollment> result = enrollmentRepository.findBySemesterPlanId(plan1.getId());
 
         // Assert
         assertThat(result).hasSize(2);
