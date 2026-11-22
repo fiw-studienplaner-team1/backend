@@ -108,7 +108,9 @@ class EnrollmentControllerTest
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.semesterPlanId", is(winterPlan.getId().intValue())))
                 .andExpect(jsonPath("$.moduleId", is(module1.getId().intValue())))
-                .andExpect(jsonPath("$.moduleName", is("Testmodul Eins")));
+                .andExpect(jsonPath("$.moduleName", is("Testmodul Eins")))
+                .andExpect(jsonPath("$.ects", is(5)))
+                .andExpect(jsonPath("$.weeklyHours", is(4)));
     }
 
     @Test

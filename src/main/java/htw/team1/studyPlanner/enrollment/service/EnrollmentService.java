@@ -67,13 +67,17 @@ public class EnrollmentService
         return toResponse(saved);
     }
 
-    private static EnrollmentResponseDTO toResponse(Enrollment enrollment) {
+    // Wandelt eine Belegung in das Response-DTO um (wird auch von SemesterPlanService genutzt)
+    public static EnrollmentResponseDTO toResponse(Enrollment enrollment) {
+        StudyModule module = enrollment.getModuleOffering().getModule();
         return new EnrollmentResponseDTO(
                 enrollment.getId(),
                 enrollment.getSemesterPlan().getId(),
                 enrollment.getModuleOffering().getId(),
-                enrollment.getModuleOffering().getModule().getId(),
-                enrollment.getModuleOffering().getModule().getName()
+                module.getId(),
+                module.getName(),
+                module.getEcts(),
+                module.getWeeklyHours()
         );
     }
 }

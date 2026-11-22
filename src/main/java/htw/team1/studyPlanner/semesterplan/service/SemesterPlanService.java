@@ -1,6 +1,5 @@
 package htw.team1.studyPlanner.semesterplan.service;
 
-import htw.team1.studyPlanner.semesterplan.dto.PlannedModuleResponseDTO;
 import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanFilledResponseDTO;
 import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanEmptyRequestDTO;
 import htw.team1.studyPlanner.semesterplan.dto.SemesterPlanCreateResponseDTO;
@@ -9,9 +8,10 @@ import htw.team1.studyPlanner.semesterplan.repository.SemesterPlanRepository;
 import htw.team1.studyPlanner.semester.entity.Semester;
 import htw.team1.studyPlanner.semester.repository.SemesterRepository;
 import htw.team1.studyPlanner.enums.Cycle;
+import htw.team1.studyPlanner.enrollment.dto.EnrollmentResponseDTO;
 import htw.team1.studyPlanner.enrollment.entity.Enrollment;
 import htw.team1.studyPlanner.enrollment.repository.EnrollmentRepository;
-import htw.team1.studyPlanner.module.entity.StudyModule;
+import htw.team1.studyPlanner.enrollment.service.EnrollmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -80,10 +80,10 @@ public class SemesterPlanService
         // 4. Pro Plan die passenden Belegungen heraussuchen und das DTO bauen
         List<SemesterPlanFilledResponseDTO> result = new ArrayList<>();
         for (SemesterPlan semesterPlan : semesterPlans) {
-            List<PlannedModuleResponseDTO> modules = new ArrayList<>();
+            List<EnrollmentResponseDTO> modules = new ArrayList<>();
             for (Enrollment enrollment : enrollments) {
                 if (enrollment.getSemesterPlan().getId().equals(semesterPlan.getId())) {
-                    modules.add(toPlannedModule(enrollment));
+                    modules.add(EnrollmentService.toResponse(enrollment));
                 }
             }
             result.add(new SemesterPlanFilledResponseDTO(
@@ -106,17 +106,6 @@ public class SemesterPlanService
         );
     }
 
-    // Wandelt eine Belegung in ein eingeplantes Modul fuer die Anzeige um
-    private static PlannedModuleResponseDTO toPlannedModule(Enrollment enrollment) {
-        StudyModule module = enrollment.getModuleOffering().getModule();
-        return new PlannedModuleResponseDTO(
-                enrollment.getId(),
-                module.getId(),
-                module.getName(),
-                module.getEcts(),
-                module.getWeeklyHours()
-        );
-    }
 
     // Baut die Bezeichnung des Semesters, z. B. "WiSe 2026/27" oder "SoSe 2026"
     private static String toLabel(Semester semester) {

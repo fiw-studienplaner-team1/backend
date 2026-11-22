@@ -26,6 +26,7 @@ public class SemesterPlanController
         this.semesterPlanService = semesterPlanService;
     }
 
+    //POST
     @PostMapping
     public ResponseEntity<SemesterPlanCreateResponseDTO> createSemesterPlan(@RequestBody SemesterPlanEmptyRequestDTO request) {
         LOG.info("Semesterplan fuer Semester {} wird angelegt", request.semesterId());
