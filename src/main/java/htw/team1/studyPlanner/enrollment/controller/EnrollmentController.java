@@ -40,7 +40,8 @@ public class EnrollmentController
     // PUT /semesterplans/{semesterPlanId}/enrollments/{enrollmentId}/move
     // eine bestehende Zeile in der Tabelle wird verändert, id bleibt dabei gleich
     @PutMapping("/{enrollmentId}/move")
-    public ResponseEntity<EnrollmentResponseDTO> moveEnrollment(
+    //updateEnrollment
+    public ResponseEntity<EnrollmentResponseDTO> updateEnrollment(
             @PathVariable Long semesterPlanId,
             @PathVariable Long enrollmentId,
             @RequestBody EnrollmentRequestMoveDTO request) {
@@ -54,7 +55,8 @@ public class EnrollmentController
 
     // DELETE /semesterplans/{semesterPlanId}/enrollments/{enrollmentId}
     @DeleteMapping("/{enrollmentId}")
-    public ResponseEntity<Void> deleteEnrollment(
+   //Delete allEnrollments
+    public ResponseEntity<Void> deleteEnrollmentByID(
             @PathVariable Long semesterPlanId,
             @PathVariable Long enrollmentId) {
 

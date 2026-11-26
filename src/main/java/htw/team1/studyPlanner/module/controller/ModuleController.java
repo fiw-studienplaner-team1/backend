@@ -40,7 +40,7 @@ public class ModuleController
 
     //GET modules by id
     @GetMapping("/{id}")
-    public ResponseEntity<ModuleResponseDTO> getOneModuleById(@PathVariable Long id)
+    public ResponseEntity<ModuleResponseDTO> getModuleById(@PathVariable Long id)
     {
         LOG.info("Modul mit der id {} wird abgerufen", id);
 
