@@ -139,7 +139,7 @@ public class EnrollmentService
     }
 
     // Belegung loeschen
-    public void delete(Long semesterPlanId, Long enrollmentId)
+    public void deleteEnrollment(Long semesterPlanId, Long enrollmentId)
     {
         Enrollment enrollment = enrollmentRepository.findByIdAndSemesterPlanId(enrollmentId, semesterPlanId)
                 .orElseThrow(() -> new ResourceNotFoundException(

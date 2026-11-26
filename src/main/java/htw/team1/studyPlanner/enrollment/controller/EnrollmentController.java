@@ -60,7 +60,7 @@ public class EnrollmentController
             @PathVariable Long semesterPlanId,
             @PathVariable Long enrollmentId) {
 
-        enrollmentService.delete(semesterPlanId, enrollmentId);
+        enrollmentService.deleteEnrollment(semesterPlanId, enrollmentId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
