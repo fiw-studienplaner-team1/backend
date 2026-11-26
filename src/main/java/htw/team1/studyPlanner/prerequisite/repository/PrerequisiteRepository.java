@@ -12,9 +12,9 @@ import java.util.Optional;
 //TODO erweitern um nicht-Modul-Vorraussetzung-abfragen
 public interface PrerequisiteRepository extends JpaRepository<Prerequisite, Integer>
 {
-	@Query("SELECT m FROM Prerequisite m WHERE m.successorModule.moduleNumber = :id")
-	Optional<List<Prerequisite>> findBySuccessorModuleId(String id);
+	@Query("SELECT m FROM Prerequisite m WHERE m.successorModule.moduleNumber = :moduleNumber")
+	Optional<List<Prerequisite>> findBySuccessorModuleNumber(String moduleNumber);
 	
-	@Query("SELECT m FROM Prerequisite m WHERE m.predecessorModule.moduleNumber = :id")
-	Optional<List<Prerequisite>> findByPredecessorModuleId(String id);	
+	@Query("SELECT m FROM Prerequisite m WHERE m.predecessorModule.moduleNumber = :moduleNumber")
+	Optional<List<Prerequisite>> findByPredecessorModuleId(String moduleNumber);	
 }

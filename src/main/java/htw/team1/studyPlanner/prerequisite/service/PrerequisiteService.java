@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import htw.team1.studyPlanner.prerequisite.dto.PrerequisitePredecessorAndSuccessorResponseDTO;
 import htw.team1.studyPlanner.prerequisite.dto.PrerequisiteResponseDTO;
 import htw.team1.studyPlanner.prerequisite.entity.Prerequisite;
 import htw.team1.studyPlanner.prerequisite.repository.PrerequisiteRepository;
@@ -20,44 +21,64 @@ public class PrerequisiteService
 		this.prerequisiteRepository = prerequisiteRepository;
 	}
 	
-	public List<PrerequisiteResponseDTO> findAllPredecessors(String id) {
-		List<Prerequisite> result = findPredecessorsByModulIdOrThrow(id);
+	public List<PrerequisiteResponseDTO> findAllPredecessors(String moduleNumber) {
+		List<Prerequisite> result = findPredecessorsByModulNumberOrThrow(moduleNumber);
 		return result.stream()
-				.map(PrerequisiteService::prerequisiteToResponse)
+				.map(PrerequisiteService::predecessorToResponse)
 				.toList();
 	}
 	
-	public List<PrerequisiteResponseDTO> findAllSuccessors(String id) {
-		List<Prerequisite> result = findSuccessorsByModulIdOrThrow(id);
+	public List<PrerequisiteResponseDTO> findAllSuccessors(String moduleNumber) {
+		List<Prerequisite> result = findSuccessorsByModulNumberOrThrow(moduleNumber);
 		return result.stream()
 				.map(PrerequisiteService::successorToResponse)
 				.toList();
 	}
 	
-	private List<Prerequisite> findPredecessorsByModulIdOrThrow(String moduleId) {
+	public List<PrerequisitePredecessorAndSuccessorResponseDTO> findAllPrerequisites()
+	{
+		return prerequisiteRepository.findAll().stream()
+				.map(PrerequisiteService::prerequisiteToResponse)
+				.toList();
+	}
+	
+	private List<Prerequisite> findPredecessorsByModulNumberOrThrow(String moduleNumber) {
 		return prerequisiteRepository
-		 .findBySuccessorModuleId(moduleId)
-		 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modul " + moduleId + " hat keine Vorraussetzungen."));	 
+		 .findBySuccessorModuleNumber(moduleNumber)
+		 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modul " + moduleNumber + " hat keine Vorraussetzungen."));	 
 	}
 
-	private List<Prerequisite> findSuccessorsByModulIdOrThrow(String moduleId) {
+	private List<Prerequisite> findSuccessorsByModulNumberOrThrow(String moduleNumber) {
 		return prerequisiteRepository
-		 .findByPredecessorModuleId(moduleId)
-		 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modul " + moduleId + " ist keine Vorraussetzung für andere Module."));	 
+		 .findByPredecessorModuleId(moduleNumber)
+		 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modul " + moduleNumber + " ist keine Vorraussetzung für andere Module."));	 
 	}
 	
-	
-	public static PrerequisiteResponseDTO prerequisiteToResponse(Prerequisite prerequisite)
+	public static PrerequisiteResponseDTO predecessorToResponse(Prerequisite prerequisite)
 	{
 		return new PrerequisiteResponseDTO(
-				prerequisite.getPredecessorModule().getId(), 
-				prerequisite.getMode());
+				prerequisite.getPredecessorModule().getId(),
+				prerequisite.getPredecessorModule().getModuleNumber(),
+				prerequisite.getPrerequisiteMode());
 	}
 	
 	public static PrerequisiteResponseDTO successorToResponse(Prerequisite prerequisite)
 	{
 		return new PrerequisiteResponseDTO(
-				prerequisite.getSuccessorModule().getId(), 
-				prerequisite.getMode());
+				prerequisite.getSuccessorModule().getId(),
+				prerequisite.getSuccessorModule().getModuleNumber(),
+				prerequisite.getPrerequisiteMode());
+	}
+	
+	public static PrerequisitePredecessorAndSuccessorResponseDTO prerequisiteToResponse(Prerequisite prerequisite)
+	{
+		return new PrerequisitePredecessorAndSuccessorResponseDTO(
+				prerequisite.getId(),
+				prerequisite.getPredecessorModule().getId(),
+				prerequisite.getPredecessorModule().getModuleNumber(),
+				prerequisite.getSuccessorModule().getId(),
+				prerequisite.getSuccessorModule().getModuleNumber(),
+				prerequisite.getPrerequisiteMode()
+				);
 	}
 }

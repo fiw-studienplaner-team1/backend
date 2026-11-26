@@ -15,7 +15,7 @@ public class Prerequisite
 {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	// hier nicht id von StudyModule, da generierte Ids keine garantierte
 	// Verbindung zum konkreten Modul haben
@@ -28,12 +28,12 @@ public class Prerequisite
 	private StudyModule predecessorModule;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="modus", nullable=false)
-	private PrerequisiteMode mode;
+	@Column(name="prerequisite_mode", nullable=false)
+	private PrerequisiteMode prerequisiteMode;
 	
 	public Prerequisite() {}
 
-	public Integer getId()
+	public Long getId()
 	{
 		return this.id;
 	}
@@ -58,15 +58,14 @@ public class Prerequisite
 		this.predecessorModule = predecessorModule;
 	}
 
-	public PrerequisiteMode getMode()
+	public PrerequisiteMode getPrerequisiteMode()
 	{
-		return this.mode;
+		return this.prerequisiteMode;
 	}
 
-	public void setMode(PrerequisiteMode mode)
+	public void setMode(PrerequisiteMode prerequisiteMode)
 	{
-		this.mode = mode;
+		this.prerequisiteMode = prerequisiteMode;
 	}
-	
 	
 }

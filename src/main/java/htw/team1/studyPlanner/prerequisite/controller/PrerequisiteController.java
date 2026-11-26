@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import htw.team1.studyPlanner.prerequisite.dto.PrerequisitePredecessorAndSuccessorResponseDTO;
 import htw.team1.studyPlanner.prerequisite.dto.PrerequisiteResponseDTO;
 import htw.team1.studyPlanner.prerequisite.service.PrerequisiteService;
 
@@ -22,26 +23,36 @@ public class PrerequisiteController {
 		this.prerequisiteService = prerequisiteService;
 	}
 	
-	@GetMapping("/predecessor/{id}")
-	public ResponseEntity<List<PrerequisiteResponseDTO>> getAllPredecessorsOfAModule(@PathVariable String id)
+	@GetMapping("/predecessors/{moduleNumber}")
+	public ResponseEntity<List<PrerequisiteResponseDTO>> getAllPredecessorsOfModuleByModuleNumber(@PathVariable String moduleNumber)
 	{
 		//TODO anpassen wenn erweitert um nicht-Modul-Vorraussetzungen
-        LOG.info("Vorrausgesetze Module vom Modul id {} werden abgerufen", id);
+        LOG.info("Vorausgesetze Module vom Modul-Nummer {} werden abgerufen", moduleNumber);
 		
 		//TODO anpassen wenn erweitert um nicht-Modul-Vorraussetzungen
-		List<PrerequisiteResponseDTO> predecessors = this.prerequisiteService.findAllPredecessors(id);
+		List<PrerequisiteResponseDTO> predecessors = this.prerequisiteService.findAllPredecessors(moduleNumber);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(predecessors);
 	}
 	
-	@GetMapping("/successor/{id}")
-	public ResponseEntity<List<PrerequisiteResponseDTO>> getAllSuccessorsOfAModule(@PathVariable String id)
+	@GetMapping("/successors/{moduleNumber}")
+	public ResponseEntity<List<PrerequisiteResponseDTO>> getAllSuccessorsOfModuleByModulNumber(@PathVariable String moduleNumber)
 	{
-        LOG.info("Module, die Modul id {} als Vorraussetzung haben, werden abgerufen", id);
+        LOG.info("Module, die Modul-Nummer {} als Voraussetzung haben, werden abgerufen", moduleNumber);
 
-		List<PrerequisiteResponseDTO> successors = this.prerequisiteService.findAllSuccessors(id);
+		List<PrerequisiteResponseDTO> successors = this.prerequisiteService.findAllSuccessors(moduleNumber);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(successors);
+	}
+	
+	@GetMapping("/prerequisites")
+	public ResponseEntity<List<PrerequisitePredecessorAndSuccessorResponseDTO>> getAllPrerequisites()
+	{
+		LOG.info("Alle Voraussetzungen von allen Module werden geladen");
+		
+		List<PrerequisitePredecessorAndSuccessorResponseDTO> prerequisites = this.prerequisiteService.findAllPrerequisites();
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(prerequisites);
 	}
 	
 }
