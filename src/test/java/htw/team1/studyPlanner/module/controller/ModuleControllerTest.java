@@ -33,15 +33,16 @@ class ModuleControllerTest {
     @BeforeEach
     void setUp() {
         moduleRepository.deleteAll();
-        StudyModule m1 = moduleRepository.save(createModule("Testmodul Eins", 1, 5, 4, ModuleType.PFLICHT, Cycle.WISE));
-        StudyModule m2 = moduleRepository.save(createModule("Testmodul Zwei", 2, 6, 2, ModuleType.WAHLPFLICHT, null));
+        StudyModule m1 = moduleRepository.save(createModule("Testmodul Eins", "B1", 1, 5, 4, ModuleType.PFLICHT, Cycle.WISE));
+        StudyModule m2 = moduleRepository.save(createModule("Testmodul Zwei", "B2", 2, 6, 2, ModuleType.WAHLPFLICHT, null));
         module1Id = m1.getId();
         module2Id = m2.getId();
     }
 
-    private StudyModule createModule(String name, int semester, int ects, int weeklyHours, ModuleType moduleType, Cycle cycle) {
+    private StudyModule createModule(String name, String moduleNumber, int semester, int ects, int weeklyHours, ModuleType moduleType, Cycle cycle) {
         StudyModule module = new StudyModule();
         module.setName(name);
+        module.setModuleNumber(moduleNumber);
         module.setRecommendedSemester(semester);
         module.setEcts(ects);
         module.setWeeklyHours(weeklyHours);
@@ -62,6 +63,7 @@ class ModuleControllerTest {
         mockMvc.perform(get("/modules/" + module2Id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Testmodul Zwei")))
+                .andExpect(jsonPath("$.moduleNumber", is("B2")))
                 .andExpect(jsonPath("$.recommendedSemester", is(2)))
                 .andExpect(jsonPath("$.ects", is(6)))
                 .andExpect(jsonPath("$.weeklyHours", is(2)))

@@ -54,8 +54,8 @@ class EnrollmentControllerTest
         Semester summer = semesterService.getOrCreate(Cycle.SOSE, 2030);
 
         // Module werden im WiSe bzw. SoSe angeboten
-        StudyModule module1 = saveModule("Testmodul Eins");
-        StudyModule module2 = saveModule("Testmodul Zwei");
+        StudyModule module1 = saveModule("Testmodul Eins", "E1");
+        StudyModule module2 = saveModule("Testmodul Zwei", "E2");
         winterOffering = saveOffering(module1, winter);
         saveOffering(module2, summer);
 
@@ -78,9 +78,10 @@ class EnrollmentControllerTest
         moduleRepository.deleteAll();
     }
 
-    private StudyModule saveModule(String name) {
+    private StudyModule saveModule(String name, String moduleNumber) {
         StudyModule module = new StudyModule();
         module.setName(name);
+        module.setModuleNumber(moduleNumber);
         module.setRecommendedSemester(1);
         module.setEcts(5);
         module.setWeeklyHours(4);

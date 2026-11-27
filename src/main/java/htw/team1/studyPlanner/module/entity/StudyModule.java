@@ -1,8 +1,11 @@
 package htw.team1.studyPlanner.module.entity;
 
+import java.util.List;
+
 import htw.team1.studyPlanner.enums.Cycle;
 import htw.team1.studyPlanner.enums.ModuleForm;
 import htw.team1.studyPlanner.enums.ModuleType;
+import htw.team1.studyPlanner.prerequisite.entity.Prerequisite;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +20,7 @@ public class StudyModule
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "module_number")
+	@Column(name = "module_number", nullable = false, unique = true)
 	private String moduleNumber;
 
 	@Column(name = "recommended_semester")
@@ -40,6 +43,13 @@ public class StudyModule
 	@Enumerated(EnumType.STRING)
 	@Column(name = "module_form")
 	private ModuleForm moduleForm;
+	
+	
+	@OneToMany(mappedBy="successorModule")
+	List<Prerequisite> successors;
+	
+	@OneToMany(mappedBy="predecessorModule")
+    List<Prerequisite> predecessors;
 
 	public StudyModule() {}
 
