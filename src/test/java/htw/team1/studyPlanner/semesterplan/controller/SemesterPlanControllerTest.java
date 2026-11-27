@@ -123,6 +123,7 @@ class SemesterPlanControllerTest
         // Arrange: Modul, angeboten im WiSe 2030
         StudyModule module = new StudyModule();
         module.setName("Testmodul");
+        module.setModuleNumber("D1");
         module.setRecommendedSemester(1);
         module.setEcts(5);
         module.setWeeklyHours(4);

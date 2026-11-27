@@ -63,7 +63,7 @@ public class Prerequisite
 		return this.prerequisiteMode;
 	}
 
-	public void setMode(PrerequisiteMode prerequisiteMode)
+	public void setPrerequisiteMode(PrerequisiteMode prerequisiteMode)
 	{
 		this.prerequisiteMode = prerequisiteMode;
 	}

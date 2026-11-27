@@ -61,6 +61,7 @@ class EnrollmentRepositoryTest
         // Erstes Modul + Angebot
         StudyModule module = new StudyModule();
         module.setName("Testmodul");
+        module.setModuleNumber("C1");
         module.setRecommendedSemester(1);
         module.setEcts(5);
         module.setWeeklyHours(4);
@@ -74,6 +75,7 @@ class EnrollmentRepositoryTest
         // Zweites Modul + Angebot
         StudyModule module2 = new StudyModule();
         module2.setName("Testmodul 2");
+        module2.setModuleNumber("C2");
         module2.setRecommendedSemester(1);
         module2.setEcts(5);
         module2.setWeeklyHours(4);

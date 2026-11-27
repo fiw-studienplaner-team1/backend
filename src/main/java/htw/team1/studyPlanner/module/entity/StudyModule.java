@@ -20,7 +20,7 @@ public class StudyModule
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "module_number")
+	@Column(name = "module_number", nullable = false, unique = true)
 	private String moduleNumber;
 
 	@Column(name = "recommended_semester")
