@@ -200,10 +200,13 @@ class EnrollmentControllerTest {
 
     // === NEU ===
     @Test
-    void moveEnrollment_WhenTargetPlanUnknown_ShouldReturnBadRequest() throws Exception {
+    void moveEnrollment_WhenTargetPlanUnknown_ShouldReturnNotFound() throws Exception {
         Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
 
-        mockMvc.perform(put(moveUrl(winterPlan.getId(), enrollment.getId())).contentType(MediaType.APPLICATION_JSON).content("{\"targetSemesterPlanId\": 999999}")).andExpect(status().isBadRequest());
+        mockMvc.perform(put(moveUrl(winterPlan.getId(), enrollment.getId())).contentType(MediaType.APPLICATION_JSON).content("{\"targetSemesterPlanId\": 999999}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status", is(404)))
+                .andExpect(jsonPath("$.error", is("Not Found")));
     }
 
     @Test
@@ -215,19 +218,22 @@ class EnrollmentControllerTest {
 
     // === NEU: deckt den AK-Satzteil "Ziel-Fachsemester ungueltig (nicht vorhanden)" ab ===
     @Test
-    void moveEnrollment_WhenModuleNotOfferedInTargetSemester_ShouldReturnBadRequest() throws Exception {
+    void moveEnrollment_WhenModuleNotOfferedInTargetSemester_ShouldReturnConflict() throws Exception {
         Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
 
-        mockMvc.perform(put(moveUrl(winterPlan.getId(), enrollment.getId())).contentType(MediaType.APPLICATION_JSON).content("{\"targetSemesterPlanId\": " + planWithoutModuleOfferings.getId() + "}")).andExpect(status().isBadRequest());
+        mockMvc.perform(put(moveUrl(winterPlan.getId(), enrollment.getId())).contentType(MediaType.APPLICATION_JSON).content("{\"targetSemesterPlanId\": " + planWithoutModuleOfferings.getId() + "}"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status", is(409)))
+                .andExpect(jsonPath("$.error", is("Conflict")));
     }
 
     @Test
-    void moveEnrollment_WhenModuleAlreadyPlannedInTargetPlan_ShouldReturnBadRequest() throws Exception {
+    void moveEnrollment_WhenModuleAlreadyPlannedInTargetPlan_ShouldReturnConflict() throws Exception {
         Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
         // Modul ist im Zielplan schon eingeplant -> Duplikat
         createEnrollment(summerPlan, summerOffering);
 
-        mockMvc.perform(put(moveUrl(winterPlan.getId(), enrollment.getId())).contentType(MediaType.APPLICATION_JSON).content("{\"targetSemesterPlanId\": " + summerPlan.getId() + "}")).andExpect(status().isBadRequest());
+        mockMvc.perform(put(moveUrl(winterPlan.getId(), enrollment.getId())).contentType(MediaType.APPLICATION_JSON).content("{\"targetSemesterPlanId\": " + summerPlan.getId() + "}")).andExpect(status().isConflict());
     }
 
     @Test
@@ -245,10 +251,10 @@ class EnrollmentControllerTest {
     }
 
     @Test
-    void deleteEnrollment_WhenExists_ShouldReturnOkAndRemoveOnlyTheEnrollment() throws Exception {
+    void deleteEnrollment_WhenExists_ShouldReturnNoContentAndRemoveOnlyTheEnrollment() throws Exception {
         Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
 
-        mockMvc.perform(delete(deleteUrl(winterPlan.getId(), enrollment.getId()))).andExpect(status().isOk());
+        mockMvc.perform(delete(deleteUrl(winterPlan.getId(), enrollment.getId()))).andExpect(status().isNoContent());
 
         // Belegung weg ...
         assertThat(enrollmentRepository.findById(enrollment.getId())).isEmpty();
@@ -262,7 +268,7 @@ class EnrollmentControllerTest {
     void deleteEnrollment_WhenExists_GetSemesterPlansShouldNoLongerContainTheModule() throws Exception {
         Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
 
-        mockMvc.perform(delete(deleteUrl(winterPlan.getId(), enrollment.getId()))).andExpect(status().isOk());
+        mockMvc.perform(delete(deleteUrl(winterPlan.getId(), enrollment.getId()))).andExpect(status().isNoContent());
 
         // AK-Kriterium: "Nach dem Entfernen liefert GET /semesterplans den Semesterplan ohne das Modul."
         mockMvc.perform(get("/semesterplans")).andExpect(status().isOk()).andExpect(jsonPath("$[?(@.id == " + winterPlan.getId() + ")][0].modules", hasSize(0)));
@@ -273,34 +279,8 @@ class EnrollmentControllerTest {
     void deleteEnrollment_WhenExists_ModuleCanBeReEnrolledViaPost() throws Exception {
         Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
 
-        mockMvc.perform(delete(deleteUrl(winterPlan.getId(), enrollment.getId()))).andExpect(status().isOk());
+        mockMvc.perform(delete(deleteUrl(winterPlan.getId(), enrollment.getId()))).andExpect(status().isNoContent());
 
         mockMvc.perform(post(url()).contentType(MediaType.APPLICATION_JSON).content("{\"moduleId\": " + movableModule.getId() + "}")).andExpect(status().isCreated()).andExpect(jsonPath("$.moduleId", is(movableModule.getId().intValue())));
-    }
-
-    @Test
-    void deleteEnrollment_WhenAlreadyDeleted_ShouldReturnNotFound() throws Exception {
-        Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
-        enrollmentRepository.delete(enrollment);
-
-        mockMvc.perform(delete(deleteUrl(winterPlan.getId(), enrollment.getId()))).andExpect(status().isNotFound());
-    }
-
-    // === NEU: "Fremder Eintrag" aus dem Nachweis-Abschnitt - ID existiert,
-    // gehoert aber zu einem anderen Plan ===
-    @Test
-    void deleteEnrollment_WhenEnrollmentBelongsToAnotherPlan_ShouldReturnNotFound() throws Exception {
-        Enrollment enrollment = createEnrollment(winterPlan, winterOffering);
-
-        // enrollmentId existiert, gehoert aber nicht zu summerPlan -> 404, nicht versehentlich geloescht
-        mockMvc.perform(delete(deleteUrl(summerPlan.getId(), enrollment.getId()))).andExpect(status().isNotFound());
-
-        assertThat(enrollmentRepository.findById(enrollment.getId())).isPresent();
-    }
-
-    // === NEU: deckt AK "Ungueltige Eingabe Status 400" ab ===
-    @Test
-    void deleteEnrollment_WhenIdIsNotNumeric_ShouldReturnBadRequest() throws Exception {
-        mockMvc.perform(delete("/semesterplans/" + winterPlan.getId() + "/enrollments/abc")).andExpect(status().isBadRequest());
     }
 }

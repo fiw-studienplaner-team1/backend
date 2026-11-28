@@ -1,8 +1,7 @@
 package htw.team1.studyPlanner.exception;
 
-// Wird geworfen, wenn die Eingabe fachlich ungueltig ist (z. B. Ziel-Semesterplan existiert
-// nicht, Modul wird im Zielsemester nicht angeboten, Request-Body fehlt).
-// Wird vom GlobalExceptionHandler auf HTTP 400 gemappt.
+//Wird geworfen, wenn die Eingabe ungueltig ist (z. B. Request-Body fehlt oder Quell- und
+// Ziel-Semesterplan identisch sind).
 
 public class InvalidRequestException extends RuntimeException {
     public InvalidRequestException(String message) {

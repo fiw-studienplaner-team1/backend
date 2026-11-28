@@ -1,7 +1,7 @@
 package htw.team1.studyPlanner.enrollment.controller;
 
 import htw.team1.studyPlanner.enrollment.dto.EnrollmentRequestDTO;
-import htw.team1.studyPlanner.enrollment.dto.EnrollmentRequestMoveDTO;
+import htw.team1.studyPlanner.enrollment.dto.MoveEnrollmentRequestDTO;
 import htw.team1.studyPlanner.enrollment.dto.EnrollmentResponseDTO;
 import htw.team1.studyPlanner.enrollment.service.EnrollmentService;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class EnrollmentController
     public ResponseEntity<EnrollmentResponseDTO> updateEnrollment(
             @PathVariable Long semesterPlanId,
             @PathVariable Long enrollmentId,
-            @RequestBody EnrollmentRequestMoveDTO request) {
+            @RequestBody MoveEnrollmentRequestDTO request) {
         LOG.info("Belegung {} in Semesterplan {} wird nach Semesterplan {} verschoben",
         enrollmentId, semesterPlanId, request == null ? null : request.targetSemesterPlanId());
         EnrollmentResponseDTO enrollment = enrollmentService.moveEnrollment(semesterPlanId, enrollmentId, request);
@@ -55,14 +55,14 @@ public class EnrollmentController
 
     // DELETE /semesterplans/{semesterPlanId}/enrollments/{enrollmentId}
     @DeleteMapping("/{enrollmentId}")
-   //Delete allEnrollments
-    public ResponseEntity<Void> deleteEnrollmentByID(
+   //Delete EnrollmentById
+    public ResponseEntity<Void> deleteEnrollmentById(
             @PathVariable Long semesterPlanId,
             @PathVariable Long enrollmentId) {
 
         enrollmentService.deleteEnrollment(semesterPlanId, enrollmentId);
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .noContent()
                 .build();
     }
 }

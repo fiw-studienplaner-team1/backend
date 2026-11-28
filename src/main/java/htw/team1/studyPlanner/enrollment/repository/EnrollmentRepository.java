@@ -18,7 +18,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     // Alle Belegungen mehrerer Plaene auf einmal, inkl. Angebot und Modul (gegen N+1)
     @EntityGraph(attributePaths = {"semesterPlan", "moduleOffering", "moduleOffering.module"})
-    //TODO Check: ist hier ein Typo? ID statt IN?
     List<Enrollment> findBySemesterPlanIn(List<SemesterPlan> semesterPlans);
 
     // Finde die Belegung mit dieser Id (=EnrollmentId) aber nur, wenn sie zu diesem Semesterplan gehört.

@@ -1,10 +1,11 @@
 package htw.team1.studyPlanner.enrollment.service;
 
 import htw.team1.studyPlanner.enrollment.dto.EnrollmentRequestDTO;
-import htw.team1.studyPlanner.enrollment.dto.EnrollmentRequestMoveDTO;
+import htw.team1.studyPlanner.enrollment.dto.MoveEnrollmentRequestDTO;
 import htw.team1.studyPlanner.enrollment.dto.EnrollmentResponseDTO;
 import htw.team1.studyPlanner.enrollment.entity.Enrollment;
 import htw.team1.studyPlanner.enrollment.repository.EnrollmentRepository;
+import htw.team1.studyPlanner.exception.ConflictException;
 import htw.team1.studyPlanner.exception.InvalidRequestException;
 import htw.team1.studyPlanner.exception.ResourceNotFoundException;
 import htw.team1.studyPlanner.semesterplan.entity.SemesterPlan;
@@ -47,17 +48,21 @@ public class EnrollmentService
     public EnrollmentResponseDTO enrollToSemesterPlan(Long semesterPlanId, EnrollmentRequestDTO request) {
 
         // 1. Plan suchen, sonst 404
-        SemesterPlan semesterPlan = semesterPlanRepository.findById(semesterPlanId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Semesterplan " + semesterPlanId + " nicht gefunden."));
+        SemesterPlan semesterPlan = semesterPlanRepository.findById(semesterPlanId)
+                .orElseThrow(() -> new ResourceNotFoundException("Semesterplan " + semesterPlanId + " nicht gefunden."));
 
         // 2. Modul suchen, sonst 404
-        StudyModule module = moduleRepository.findById(request.moduleId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Modul " + request.moduleId() + " nicht gefunden."));
+        StudyModule module = moduleRepository.findById(request.moduleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Modul " + request.moduleId() + " nicht gefunden."));
 
         // 3. Modulangebot im Semester des Plans suchen, sonst 409
-        ModuleOffering moduleOffering = moduleOfferingRepository.findByModuleIdAndSemesterId(module.getId(), semesterPlan.getSemester().getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT,"Modul " + module.getId() + " wird in diesem Semester nicht angeboten."));
+        ModuleOffering moduleOffering = moduleOfferingRepository
+                .findByModuleIdAndSemesterId(module.getId(), semesterPlan.getSemester().getId())
+                .orElseThrow(() -> new ConflictException("Modul " + module.getId() + " wird in diesem Semester nicht angeboten."));
 
         // 4. Schon im Plan? Dann 409
         if (enrollmentRepository.existsBySemesterPlanIdAndModuleOfferingId(semesterPlan.getId(), moduleOffering.getId())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Modul " + module.getId() + " ist bereits im Plan.");
+            throw new ConflictException("Modul " + module.getId() + " ist bereits im Plan.");
         }
 
         // 5. Belegung anlegen und speichern
@@ -75,7 +80,7 @@ public class EnrollmentService
     // das passende Modulangebot fuer dasselbe Modul im Zielsemester wird automatisch gesucht
     // (siehe enrollToSemesterPlan, Schritt 3).
 
-    public EnrollmentResponseDTO moveEnrollment(Long semesterPlanId, Long enrollmentId, EnrollmentRequestMoveDTO request) {
+    public EnrollmentResponseDTO moveEnrollment(Long semesterPlanId, Long enrollmentId, MoveEnrollmentRequestDTO request) {
         //1. Request - Body vorhanden, sonst 400 (bad request)
         if (request == null || request.targetSemesterPlanId() == null) {
             throw new InvalidRequestException("targetSemesterPlanId fehlt im Request-Body.");
@@ -87,11 +92,11 @@ public class EnrollmentService
                                 ("Belegung " + enrollmentId + " in Semesterplan "
                                         + semesterPlanId + " nicht gefunden."));
 
-        // 3. Ziel-Semesterplan suchen, sonst 400 (bad request)
+        // 3. Ziel-Semesterplan suchen, sonst 404 (not found)
         Long targetSemesterPlanId = request.targetSemesterPlanId();
 
         SemesterPlan targetPlan = semesterPlanRepository.findById(targetSemesterPlanId)
-                .orElseThrow(() -> new InvalidRequestException("Der ausgewaehlte Semesterplan " + targetSemesterPlanId + " existiert nicht."));
+                .orElseThrow(() -> new ResourceNotFoundException("Der ausgewaehlte Semesterplan " + targetSemesterPlanId + " existiert nicht."));
         SemesterPlan sourcePlan = enrollment.getSemesterPlan();
 
         // 4.Kein sinnvolles Verschieben
@@ -101,16 +106,16 @@ public class EnrollmentService
         // TODO: sobald die User-Zuordnung feststeht (siehe TODO in SemesterPlan),
         //  pruefen, ob targetPlan und sourcePlan zur selben Studentin gehoeren.
 
-        // 5. Modulangebot im Zielsemester suchen, sonst 400 (bad request)
+        // 5. Modulangebot im Zielsemester suchen, sonst 409 (conflict)
         StudyModule module = enrollment.getModuleOffering().getModule();
         ModuleOffering targetOffering = moduleOfferingRepository
                 .findByModuleIdAndSemesterId(module.getId(), targetPlan.getSemester().getId())
-                .orElseThrow(() -> new InvalidRequestException("Modul '" + module.getName() +
+                .orElseThrow(() -> new ConflictException("Modul '" + module.getName() +
                         "' wird im ausgewaehltem Semester nicht angeboten."));
 
-        // 6. Duplikat, dann 400
+        // 6. Duplikat, dann 409 (conflict)
         if (enrollmentRepository.existsBySemesterPlanIdAndModuleOfferingId(targetPlan.getId(), targetOffering.getId())) {
-            throw new InvalidRequestException("Modul ist im ausgewaehltem Semesterplan bereits enthalten.");
+            throw new ConflictException("Modul ist im ausgewaehltem Semesterplan bereits enthalten.");
         }
 
         // 7. "Umhaengen"

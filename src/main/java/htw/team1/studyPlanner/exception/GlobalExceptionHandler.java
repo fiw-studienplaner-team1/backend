@@ -10,10 +10,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.time.Instant;
 
-// Zentrale Fehlerbehandlung fuer neu geschriebene Endpunkte (siehe TODO in den Services:
-// Team hat sich fuer neuen Code auf diesen Weg geeinigt). Bestehende ResponseStatusException-
-// Aufrufe (z. B. in enrollToSemesterPlan) bleiben unveraendert - die behandelt Spring bereits
-// automatisch, ohne dass es hier einen eigenen Handler braucht.
+// Zentrale Fehlerbehandlung fuer projektspezifische Exceptions. Bestehende ResponseStatusException-
+// Aufrufe in anderen Services behandelt Spring weiterhin direkt.
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,6 +24,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ErrorResponse> handleInvalid(InvalidRequestException ex, HttpServletRequest request) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handleConflict(ConflictException ex, HttpServletRequest request) {
+        return build(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
     // Fehlender oder nicht lesbarer Request-Body (z.B. leerer PUT-Body beim Verschieben)
