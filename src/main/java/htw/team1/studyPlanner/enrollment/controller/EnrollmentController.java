@@ -1,6 +1,7 @@
 package htw.team1.studyPlanner.enrollment.controller;
 
 import htw.team1.studyPlanner.enrollment.dto.EnrollmentRequestDTO;
+import htw.team1.studyPlanner.enrollment.dto.MoveEnrollmentRequestDTO;
 import htw.team1.studyPlanner.enrollment.dto.EnrollmentResponseDTO;
 import htw.team1.studyPlanner.enrollment.service.EnrollmentService;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class EnrollmentController
     }
 
     // POST /semesterplans/{semesterPlanId}/enrollments - plant ein Modul in den Plan ein
+    // eine neue Zeile wird in der Tabelle angelegt
     @PostMapping
     public ResponseEntity<EnrollmentResponseDTO> createEnrollment(@PathVariable Long semesterPlanId,
                                                             @RequestBody EnrollmentRequestDTO request) {
@@ -33,5 +35,34 @@ public class EnrollmentController
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(enrollment);
+    }
+
+    // PUT /semesterplans/{semesterPlanId}/enrollments/{enrollmentId}/move
+    // eine bestehende Zeile in der Tabelle wird verändert, id bleibt dabei gleich
+    @PutMapping("/{enrollmentId}/move")
+    //updateEnrollment
+    public ResponseEntity<EnrollmentResponseDTO> updateEnrollment(
+            @PathVariable Long semesterPlanId,
+            @PathVariable Long enrollmentId,
+            @RequestBody MoveEnrollmentRequestDTO request) {
+        LOG.info("Belegung {} in Semesterplan {} wird nach Semesterplan {} verschoben",
+        enrollmentId, semesterPlanId, request == null ? null : request.targetSemesterPlanId());
+        EnrollmentResponseDTO enrollment = enrollmentService.moveEnrollment(semesterPlanId, enrollmentId, request);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(enrollment);
+    }
+
+    // DELETE /semesterplans/{semesterPlanId}/enrollments/{enrollmentId}
+    @DeleteMapping("/{enrollmentId}")
+   //Delete EnrollmentById
+    public ResponseEntity<Void> deleteEnrollmentById(
+            @PathVariable Long semesterPlanId,
+            @PathVariable Long enrollmentId) {
+
+        enrollmentService.deleteEnrollment(semesterPlanId, enrollmentId);
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }

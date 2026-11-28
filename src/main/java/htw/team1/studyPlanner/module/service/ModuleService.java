@@ -44,12 +44,12 @@ public class ModuleService {
 
     // Read - ein Modul
     public ModuleResponseDTO findById(Long id) {
-        StudyModule studyModule = findStudyModuleOrThrow(id);
+        StudyModule studyModule = findModuleOrThrow(id);
         return toResponse(studyModule);
     }
 
     // Read - Modul NOT_FOUND (404)
-    private StudyModule findStudyModuleOrThrow(Long id) {
+    private StudyModule findModuleOrThrow(Long id) {
         return moduleRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modul " + id + " nicht gefunden."));
     }
